@@ -5,6 +5,7 @@ import { Card, Form, Button, Input, Icon, Typography } from "antd";
 const { Title } = Typography;
 const { Meta } = Card;
 import Layout from "../../components/Layout";
+import { userSignup } from "../../lib/api";
 
 class Signup extends Component {
   state = {
@@ -19,7 +20,16 @@ class Signup extends Component {
   };
   submitHandlers = event => {
     event.preventDefault();
-    console.log(this.state);
+    const user = {
+      email: this.state.email,
+      password: this.state.password,
+      confirmpassword: this.state.confirmpassword,
+      category: "author"
+    };
+
+    userSignup(user)
+      .then(response => {})
+      .catch(error => {});
   };
   render() {
     return (
@@ -60,7 +70,7 @@ class Signup extends Component {
                   Sign up
                 </Button>
               </Form.Item>
-              <hr class="hr-text" data-content="OR" />
+              <hr className="hr-text" data-content="OR" />
 
               <h6 style={{ textAlign: "center" }}>
                 Already have an account?{" "}
