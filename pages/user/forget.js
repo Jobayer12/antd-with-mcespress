@@ -26,7 +26,11 @@ class Forget extends Component {
           <Card
             hoverable
             style={{ width: 350 }}
-            title={<h2 style={{ textAlign: "center" }}>Forgot password</h2>}
+            title={
+              <h2 style={{ textAlign: "center", cursor: "default" }}>
+                Forgot password
+              </h2>
+            }
           >
             <Form style={{ marginBottom: 30, marginTop: 30 }}>
               <Form.Item>
