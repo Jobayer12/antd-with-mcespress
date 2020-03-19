@@ -1,7 +1,8 @@
 import { Component } from "react";
 import "./signin.less";
-import { Card, Row, Col, Form, Checkbox, Button, Input, Icon } from "antd";
-
+import Link from "next/link";
+import { Card, Form, Button, Input, Icon, Typography } from "antd";
+const { Title } = Typography;
 const { Meta } = Card;
 import Layout from "../../components/Layout";
 
@@ -23,8 +24,13 @@ class LoginModal extends Component {
     return (
       <Layout>
         <div className="container">
-          <Card hoverable style={{ width: 350, height: 250 }}>
-            <Form>
+          {/* <Title title={<span >Title</span>} >Login</Title> */}
+          <Card
+            hoverable
+            style={{ width: 350 }}
+            title={<h2 style={{ textAlign: "center" }}>Login</h2>}
+          >
+            <Form style={{ marginBottom: 30, marginTop: 30 }}>
               <Form.Item>
                 <Input
                   prefix={<Icon type="user" style={{ fontSize: 13 }} />}
@@ -41,13 +47,23 @@ class LoginModal extends Component {
                 />
               </Form.Item>
               <Form.Item>
-                <Checkbox>Remember me</Checkbox>
+                <Link href="/user/forget">
+                  <a style={{ float: "right" }}>Forget Password</a>
+                </Link>
               </Form.Item>
               <Form.Item>
                 <Button onClick={this.submitHandlers} type="primary" block>
                   Login
                 </Button>
               </Form.Item>
+              <hr class="hr-text" data-content="OR" />
+
+              <h6 style={{ textAlign: "center" }}>
+                Don't have an account?{" "}
+                <Link href="/user/signup" style={{ fontWeight: "bold" }}>
+                  SIGNUP
+                </Link>
+              </h6>
             </Form>
           </Card>
         </div>

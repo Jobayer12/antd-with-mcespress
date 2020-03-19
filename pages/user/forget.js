@@ -6,11 +6,9 @@ const { Title } = Typography;
 const { Meta } = Card;
 import Layout from "../../components/Layout";
 
-class Signup extends Component {
+class Forget extends Component {
   state = {
-    email: "",
-    password: "",
-    confirmpassword: ""
+    email: ""
   };
   handleChange = event => {
     this.setState({
@@ -25,11 +23,10 @@ class Signup extends Component {
     return (
       <Layout>
         <div className="container">
-          {/* <Title title={<span >Title</span>} >Login</Title> */}
           <Card
             hoverable
             style={{ width: 350 }}
-            title={<h2 style={{ textAlign: "center" }}>SIGN UP</h2>}
+            title={<h2 style={{ textAlign: "center" }}>Forgot password</h2>}
           >
             <Form style={{ marginBottom: 30, marginTop: 30 }}>
               <Form.Item>
@@ -40,34 +37,12 @@ class Signup extends Component {
                   name="email"
                 />
               </Form.Item>
-              <Form.Item>
-                <Input.Password
-                  placeholder="Password"
-                  onChange={this.handleChange}
-                  name="password"
-                />
-              </Form.Item>
-              <Form.Item>
-                <Input.Password
-                  placeholder="confirm password"
-                  onChange={this.handleChange}
-                  name="confirmpassword"
-                />
-              </Form.Item>
 
               <Form.Item>
                 <Button onClick={this.submitHandlers} type="primary" block>
-                  Sign up
+                  Submit
                 </Button>
               </Form.Item>
-              <hr class="hr-text" data-content="OR" />
-
-              <h6 style={{ textAlign: "center" }}>
-                Already have an account?{" "}
-                <Link href="/user/signin" style={{ fontWeight: "bold" }}>
-                  SIGNIN
-                </Link>
-              </h6>
             </Form>
           </Card>
         </div>
@@ -76,4 +51,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default Forget;
