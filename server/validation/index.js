@@ -21,10 +21,10 @@ const vaidationSignUp = newuser => {
     errors.password = "Password atleast 6 character";
   if (isEmpty(newuser.password)) errors.password = "password can not be empty";
 
-  if (isEmpty(newuser.confirmPassword))
-    errors.confirmPassword = "confirm password can not be empty";
-  if (newuser.password !== newuser.confirmPassword)
-    errors.confirmPassword = "password not match";
+  if (isEmpty(newuser.confirmpassword))
+    errors.confirmpassword = "confirm password can not be empty";
+  if (newuser.password !== newuser.confirmpassword)
+    errors.confirmpassword = "password not match";
 
   return {
     errors,

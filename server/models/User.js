@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt=require('bcrypt');
+const bcrypt = require("bcrypt");
 const { ObjectId } = mongoose.Schema;
 let SALT_WORK_FACTOR = 10;
 
@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       lowercase: true,
-      unique: true,
       required: "Email is required"
     },
     password: {
@@ -19,8 +18,8 @@ const userSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum:["author","reviewer","admin"],
-      default:"author",
+      enum: ["author", "reviewer", "admin"],
+      default: "author"
     },
     isVerified: {
       type: Boolean
@@ -40,7 +39,6 @@ const autoPopulateFollowingAndFollowers = function(next) {
 
 userSchema.pre("findOne", autoPopulateFollowingAndFollowers);
 
-
 userSchema.pre("save", async function save(next) {
   if (!this.isModified("password")) return next();
   try {
@@ -55,6 +53,5 @@ userSchema.pre("save", async function save(next) {
 userSchema.methods.validatePassword = async function validatePassword(data) {
   return await bcrypt.compare(data, this.password);
 };
-
 
 module.exports = mongoose.model("User", userSchema);
