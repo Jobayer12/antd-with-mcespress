@@ -15,7 +15,7 @@ exports.validateSignup = (req, res, next) => {
   const User = {
     email: req.body.email,
     password: req.body.password,
-    confirmPassword: req.body.confirmPassword
+    confirmpassword: req.body.confirmpassword
   };
 
   const { valid, errors } = vaidationSignUp(User);
@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
       if (result.email === email) {
         return res.status(400).json({
           errors: {
-            message: "email already exists"
+            email: "email already exists"
           }
         });
       }
@@ -51,7 +51,7 @@ exports.signup = async (req, res) => {
   });
   user
     .save()
-    .then(response => {
+    .then(() => {
       return res.status(200).send({
         message: {
           success: "account created successfully. check your mail box"
