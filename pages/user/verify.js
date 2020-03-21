@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Card, Form, Button, Input } from "antd";
 import Layout from "../../components/Layout";
 import { successNotificaiton } from "../../components/notification";
-import { userResetPassword } from "../../lib/api";
+import { userEmailVerify } from "../../lib/api";
 class Forget extends Component {
   state = {
     email: "",
@@ -22,7 +22,7 @@ class Forget extends Component {
     const user = {
       email: this.state.email
     };
-    userResetPassword(user)
+    userEmailVerify(user)
       .then(result => {
         this.setState({
           message: result.message,
@@ -32,7 +32,7 @@ class Forget extends Component {
           "success",
           "bottomRight",
           "Verification email sent",
-          `please cheeck you mail box to reset your password`
+          `please cheeck you mail box to verify your email address`
         );
       })
       .catch(this.showError);
@@ -42,6 +42,7 @@ class Forget extends Component {
     const error = (err.response && err.response.data) || err.message;
     this.setState({ error: error.errors, isLoading: false });
   };
+
   handleClick = event => {
     this.setState({
       error: ""
@@ -58,7 +59,7 @@ class Forget extends Component {
             style={{ width: 350 }}
             title={
               <h2 style={{ textAlign: "center", cursor: "default" }}>
-                Forget Password
+                Verify Email
               </h2>
             }
           >

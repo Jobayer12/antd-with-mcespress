@@ -3,6 +3,7 @@ const User = mongoose.model("User");
 const md5 = require("md5");
 const bcrypt = require("bcrypt");
 const jwt = require("../token/index");
+const { verifyEmail } = require("../nodemailer");
 
 const { vaidationSignUp, vaidationSignIn } = require("../validation/index");
 
@@ -80,11 +81,10 @@ exports.validateSignin = (req, res, next) => {
 exports.signin = async (req, res, next) => {
   const { email, password } = req.body;
   await User.findOne({ email }).then(async result => {
-    console.log(result);
     if (result === null) {
       return res.status(400).json({
         errors: {
-          message: "no user found"
+          email: "no user found"
         }
       });
     }
@@ -93,7 +93,8 @@ exports.signin = async (req, res, next) => {
       if (result.isVerified === false) {
         return res.status(400).json({
           errors: {
-            message: "Email not verify.Please Verify your email address"
+            email: "Email not verify",
+            invalid: true
           }
         });
       }
@@ -104,7 +105,7 @@ exports.signin = async (req, res, next) => {
       if (!isMatch) {
         return res.status(400).json({
           errors: {
-            message: "Password not match"
+            password: "Password not match"
           }
         });
       }
@@ -138,11 +139,11 @@ exports.restPassword = (req, res) => {
       if (user === null || user === "undefined") {
         return res.status(400).json({
           errors: {
-            message: "User not found"
+            email: "User not found"
           }
         });
       }
-      const resetPassword = await User.findOneAndUpdate(
+      await User.findOneAndUpdate(
         {
           email: email
         },
@@ -150,21 +151,44 @@ exports.restPassword = (req, res) => {
         { new: true, runValidators: true }
       );
 
-      const { _id, salt, hash, createdAt, updatedAt, category } = resetPassword;
-      const users = {
-        _id,
-        email,
-        salt,
-        hash,
-        createdAt,
-        updatedAt,
-        category
-      };
+      return res.status(200).json({
+        message: {
+          success: true
+        }
+      });
+    })
+
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+exports.emailVerify = (req, res) => {
+  const { email } = req.body;
+  const VerifiedCode = UserverifiedCode(email);
+
+  User.findOne({ email: email })
+    .then(async user => {
+      if (user === null || user === "undefined") {
+        return res.status(400).json({
+          errors: {
+            email: "User not found"
+          }
+        });
+      }
+      await User.findOneAndUpdate(
+        {
+          email: email
+        },
+        { $set: { VerifiedCode: VerifiedCode } },
+        { new: true, runValidators: true }
+      );
+
+      await verifyEmail(email, VerifiedCode);
 
       return res.status(200).json({
         message: {
-          success: "please check your mail box",
-          user: users
+          success: true
         }
       });
     })
@@ -177,32 +201,33 @@ exports.restPassword = (req, res) => {
 exports.verifyEmail = (req, res) => {
   const { VerifiedCode } = req.params;
 
-  User.findOne({ VerifiedCode }).then(result => {
-    if (result && result === null) {
-      return res.status(400).json({
-        errors: {
-          message: "Token not found"
-        }
-      });
-    }
-  });
+  User.findOne({ VerifiedCode: VerifiedCode })
+    .then(async user => {
+      if (user === null || user === "undefined") {
+        return res.status(400).json({
+          errors: {
+            message: "token not found"
+          }
+        });
+      }
+      await User.findOneAndUpdate(
+        {
+          VerifiedCode
+        },
+        { $set: { VerifiedCode: null, isVerified: true } },
+        { new: true, runValidators: true }
+      );
 
-  User.findOneAndUpdate(
-    {
-      VerifiedCode
-    },
-    { $set: { VerifiedCode: null, isVerified: true } },
-    { new: true, runValidators: true }
-  ).exec((err, user) => {
-    if (err) {
-      return res.status(400).json({
-        errors: {
-          message: err
+      return res.status(200).json({
+        message: {
+          success: true
         }
       });
-    }
-    return res.status(200).send(user);
-  });
+    })
+
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 exports.signout = async (req, res) => {

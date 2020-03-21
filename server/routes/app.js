@@ -23,11 +23,8 @@ router.post(
 );
 
 router.post("/api/v0/auth/signin", authController.signin);
-router.post(
-  "/api/v0/auth/resetPassword",
-  authController.isAlreadyLoggedIn,
-  authController.restPassword
-);
+router.post("/api/v0/auth/resetPassword", authController.restPassword);
+router.post("/api/v0/auth/emailVerify", authController.emailVerify);
 router.get(
   "/api/v0/auth/verifyEmail/:VerifiedCode",
   authController.verifyEmail

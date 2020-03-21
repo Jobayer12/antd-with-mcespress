@@ -1,10 +1,12 @@
 import { Component } from "react";
 import "./signin.less";
-import { Spin } from "antd";
 import Link from "next/link";
-import { Card, Form, Button, Input, Icon } from "antd";
+import Head from "next/head";
+import { Card, Form, Button, Input, Spin, notification } from "antd";
+
 import { userSignup } from "../../lib/api";
 import Layout from "../../components/Layout";
+import { successNotificaiton } from "../../components/notification";
 
 class Signup extends Component {
   state = {
@@ -34,13 +36,21 @@ class Signup extends Component {
       confirmpassword: this.state.confirmpassword,
       category: "author"
     };
-    console.log(user);
     userSignup(user)
       .then(message => {
         this.setState({
           message,
-          isLoading: false
+          isLoading: false,
+          email: "",
+          password: "",
+          confirmpassword: ""
         });
+        successNotificaiton(
+          "success",
+          "bottomRight",
+          "Account created successfully.",
+          `Dear Jobayer Your account created.please cheeck you mail box to verify your email address`
+        );
       })
       .catch(this.showError);
   };
@@ -52,11 +62,26 @@ class Signup extends Component {
   };
 
   render() {
-    const { error, isLoading } = this.state;
+    const { error, isLoading, email, password, confirmpassword } = this.state;
 
     return (
       <Layout>
         <div className="container">
+          <Head>
+            <title>My page title</title>
+            <meta
+              name="viewport"
+              content="initial-scale=1.0, width=device-width"
+              key="viewport"
+            />
+          </Head>
+          <Head>
+            <meta
+              name="viewport"
+              content="initial-scale=1.2, width=device-width"
+              key="viewport"
+            />
+          </Head>
           <Card
             hoverable
             style={{ width: 350 }}
@@ -68,28 +93,46 @@ class Signup extends Component {
                   onChange={this.handleChange}
                   name="email"
                   placeholder="Email"
-                  prefix={<Icon type="user" style={{ fontSize: 13 }} />}
+                  value={email}
                 />
                 {error.email ? (
-                  <span style={{ margin: 0 }}>{error.email}</span>
+                  <span style={{ margin: 0, color: "red", marginLeft: 2 }}>
+                    {error.email}
+                  </span>
                 ) : (
                   ""
                 )}
               </Form.Item>
 
-              <Form.Item>
+              <Form.Item onClick={this.handleClick}>
                 <Input.Password
                   onChange={this.handleChange}
                   name="password"
                   placeholder="Password"
+                  value={password}
                 />
+                {error.password ? (
+                  <span style={{ margin: 0, color: "red", marginLeft: 2 }}>
+                    {error.password}
+                  </span>
+                ) : (
+                  ""
+                )}
               </Form.Item>
-              <Form.Item>
+              <Form.Item onClick={this.handleClick}>
                 <Input.Password
                   onChange={this.handleChange}
                   name="confirmpassword"
                   placeholder="confirm password"
+                  value={confirmpassword}
                 />
+                {error.confirmpassword ? (
+                  <span style={{ margin: 0, color: "red", marginLeft: 2 }}>
+                    {error.confirmpassword}
+                  </span>
+                ) : (
+                  ""
+                )}
               </Form.Item>
 
               <Form.Item style={{ marginTop: 20 }}>
