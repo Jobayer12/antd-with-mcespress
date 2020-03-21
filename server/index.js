@@ -97,9 +97,14 @@ app.prepare().then(() => {
   server.get("*", (req, res) => {
     handle(req, res);
   });
+  // server.listen(port,' 192.168.1.107');
+  server.listen(port,'192.168.1.107',function(err){
 
-  server.listen(port, err => {
-    if (err) throw err;
+    if(err){
+      throw new err;
+    }
+
     console.log(`Server listening on ${ROOT_URL}`);
-  });
+
+  })
 });
